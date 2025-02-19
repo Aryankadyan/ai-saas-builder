@@ -10,7 +10,19 @@ const Demo = () => {
     summary: '',
   })
 
+  const [allArticles, setAllArticles] = useState([]);
+  const[copied, setCopied] = useState("");
   const [getSummary, {error, isFetching}] = useLazyGetSummaryQuery()
+
+  useEffect(()=>{
+    const articlesFromLocalStorage = JSON.parse(
+      localStorage.getItem('articles')
+    )
+
+    if(articlesFromLocalStorage){
+      setAllArticles(articlesFromLocalStorage)
+    }
+  }, [])
   
   const handleSubmit = async (e) =>{
     e.preventDefault();
@@ -19,10 +31,22 @@ const Demo = () => {
    if(data?.summary){
     const newArticle = { ...article, summary: data.summary}
 
+    const updatedAllArticles = [newArticle, ...allArticles]
+
     setArticle(newArticle);
-    console.log(newArticle)
+    setAllArticles(updatedAllArticles);
+    
+    localStorage.setItem('articles', JSON.stringify(updatedAllArticles))
    }
   }
+
+const handleCopy = (copyUrl) =>{
+  setCopied(copyUrl);
+  navigator.clipboard.writeText(copyUrl);
+  setTimeout(()=> setCopied(false), 2000)
+
+}
+
   return (
   <section className='mt-18 w-full max-w-xl'>
     {/*Search*/}
@@ -50,6 +74,60 @@ const Demo = () => {
             🗑️
           </button>
       </form>
+
+      {/* Browse URL History */}
+      <div className='flex flex-col gap-1 max-h-66 overflow-y-auto'>
+        {allArticles.map((item, index) => (
+          <div   
+          key={`link-${index}`}
+          onClick={()=> setArticle(item)}
+          className='link_card'
+          >
+            <div className='copy_btn' onClick={()=>
+              handleCopy(item.url)}>
+
+              <img
+              src={copied === item.url ? tick : copy}
+              alt='copy_icon'
+              className='w-[40%] h-[40%] object-contain'
+              />
+
+      </div>
+      <p className='flex-2 font-satoshi text-blue-500 font-medium text-sm truncate'>
+        {item.url}
+      </p>
+      </div>
+        ))}
+    </div>
+    </div>
+    
+    {/* Display Results */}
+    <div className='my-11 max-w-full justify-center items-center'>
+      {isFetching ? (
+        <img src={loader} alt='loader' className='w-20 h-20 object-contain'/>
+      ) : error ? (
+        <p className='font-inter font-bold text-black text-center'>
+            Well, that wasn&apos;t supposed to happen...
+            <br/>
+            <span className='font-satoshi font-normal text-gray-600'>
+              {error?.data?.error}
+            </span>
+        </p>
+      ) : (
+        article.summary && (
+          <div className='flex flex-col gap-4'>
+            <h2 className='font-satoshi font-bold text-gray-600 text-xl'>
+              Article <span 
+              className='blue_gradient'>Summary</span>
+            </h2>
+        <div className='summary_box'>
+          <p className='font-inter font-medium text-sm text-gray-600'>
+            {article.summary}
+          </p>
+        </div>
+        </div>
+      )
+      )}
     </div>
   </section>
   )
