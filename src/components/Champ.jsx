@@ -5,13 +5,13 @@ import {logo} from '../assets'
 const Champ = () => {
   return (
     <header className='w-full flex justify-center items-center flex-col'>
-        <nav className='flex justify-between items-center w-full mb-11 pt-4'>
+        <nav className='flex justify-between items-center w-full mb-10 pt-3'>
             <img src={logo} alt='sumz_logo'
-            className='w-30 object-contain'/>
+            className='w-28 object-contain'/>
 
             <button 
             type ='button'
-            onClick={()=> window.open('https://github.com/Aryankadyan/ai-saas-builder.git/')}
+            onClick={()=> window.open('https://github.com/Aryankadyan/ai-saas-builder.git/' ,'_blank')}
             className='black_btn'>
               Github
             </button>
@@ -21,7 +21,7 @@ const Champ = () => {
           <span className="orange_gradient">Artifical Intelligence</span>
         </h1>
         <h2 className='desc'>
-        "Summarize Articles Instantly with Cutting-Edge AI for Clear, Concise Insights" 🚀
+        Summarize Articles Instantly with Cutting-Edge AI for Clear, Concise Insights🚀
         </h2>
     </header>
 

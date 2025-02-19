@@ -6,15 +6,14 @@ import './App.css'
 const App = () => {
   return (
     <main>
-        <div className='main'>
-            <div className='gradient'/>
-        </div>
+      <div className='main'>
+        <div className='gradient' />
+      </div>
 
-<div className='app'>
-    <Demo/>
-    <Champ/>
-</div>
-
+      <div className='app'>
+        <Demo />
+        <Champ />
+      </div>
     </main>
   )
 }
